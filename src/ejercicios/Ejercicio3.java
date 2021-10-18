@@ -9,15 +9,15 @@ import java.util.stream.Stream;
 import us.lsi.common.Files2;
 
 public class Ejercicio3 {
-	//Creación de la clase Par mediante record, así como del constructor que necesitamos
+	//CreaciÃ³n de la clase Par mediante record, asÃ­ como del constructor que necesitamos
 	public record Par(int v1, int v2) {
 		public static Par of(int v1, int v2) {
 			return new Par(v1, v2);
 		}
 	}
-	//El método itera pares desde 0 hasta el límite, estos pares se van añadiendo a una lista
-	//el primer valor sigue una secuencia lineal, mientras que el segundo va variando en función
-	//de la condición t.v1 % 3 == 1
+	//El mÃ©todo itera pares desde 0 hasta el lÃ­mite, estos pares se van aÃ±adiendo a una lista
+	//el primer valor sigue una secuencia lineal, mientras que el segundo va variando en funciÃ³n
+	//de la condiciÃ³n t.v1 % 3 == 1
 	//tras lo cual se crea el string de la lista final.
 	public static String ejercicio3(Integer a, Integer limit) {
 		return Stream
@@ -33,43 +33,45 @@ public class Ejercicio3 {
 		//Nuestro contador
 		int i = 0;
 		//Nuestro acumulador
-		String res = "";
-		//El par que vamos a ir modificando para añadir a nuestro acumulador
+		List<Par> res = new ArrayList();
+		//El par que vamos a ir modificando para aÃ±adir a nuestro acumulador
 		Par par = Par.of(0, a);
-		while(i<a) {
-			if(par.v1 % 3 == 1) {
-				//Si se da la condición se añade al acumulador el string del par que queremos
-				res += Par.of(i, par.v2).toString() + ", ";
-				//A continuación actualizamos el par
+		while(i<Math.abs(a)) {
+			if(Math.abs(par.v1 % 3) == 1) {
 				par = Par.of(i, par.v2);
+				//Si se da la condiciÃ³n se aÃ±ade al acumulador el string del par que queremos
+				res.add(par);
+				//A continuaciÃ³n actualizamos el par
+				
 			}
 			else {
-				//Si no se da la condición modificamos el par de otra manera, como indica en el enunciado
-				res += Par.of(i, par.v1+par.v2).toString() + ", ";
-				//A continuación también actualizamos el par
 				par = Par.of(i, par.v1+par.v2);
+				//Si no se da la condiciÃ³n modificamos el par de otra manera, como indica en el enunciado
+				res.add(par);
+				//A continuaciÃ³n tambiÃ©n actualizamos el par
+				
 			}
 			i++;
 		}
-		return res;
+		return res.toString();
 	}
 	
 	public static String ejercicio3RecFin(Integer a, Integer limit) {
-		return ejercicio3RecFinAux(a, limit, "", 0, Par.of(0, a));
+		return ejercicio3RecFinAux(a, limit, new ArrayList<Par>(), 0, Par.of(0, a));
 	}
 	
-	public static String ejercicio3RecFinAux(Integer a, Integer limit, String res, Integer puntero, Par par) {
+	public static String ejercicio3RecFinAux(Integer a, Integer limit, List<Par> res, Integer puntero, Par par) {
 		if(puntero == limit-1) {
-			res += Par.of(puntero, par.v2).toString();
-			return res;
+			res.add(Par.of(puntero, par.v2));
+			return res.toString();
 		}
 		else {
 			if(par.v1 % 3 == 1) {
-				res += Par.of(puntero, par.v2).toString() + ", ";
+				res.add(Par.of(puntero, par.v2));
 				return ejercicio3RecFinAux(a, limit, res, puntero+1, Par.of(puntero, par.v2));
 			}
 			else {
-				res += Par.of(puntero, par.v1 + par.v2).toString() + ", ";
+				res.add(Par.of(puntero, par.v1 + par.v2));
 				return ejercicio3RecFinAux(a, limit, res, puntero+1, Par.of(puntero, par.v1 + par.v2));
 			}
 		}
