@@ -32,23 +32,25 @@ public class Ejercicio3 {
 	public static String ejercicio3It(Integer a, Integer limit) {
 		//Nuestro contador
 		int i = 0;
-		//Nuestro acumulador
+		//Nuestra lista acumuladora
 		List<Par> res = new ArrayList();
 		//El par que vamos a ir modificando para añadir a nuestro acumulador
 		Par par = Par.of(0, a);
 		while(i<Math.abs(a)) {
 			if(Math.abs(par.v1 % 3) == 1) {
-				par = Par.of(i, par.v2);
-				//Si se da la condición se añade al acumulador el string del par que queremos
-				res.add(par);
 				//A continuación actualizamos el par
+				par = Par.of(i, par.v2);
+				//Si se da la condición se añade a la lista el par que queremos
+				res.add(par);
+				
 				
 			}
 			else {
+				//A continuación también actualizamos el par
 				par = Par.of(i, par.v1+par.v2);
 				//Si no se da la condición modificamos el par de otra manera, como indica en el enunciado
 				res.add(par);
-				//A continuación también actualizamos el par
+				
 				
 			}
 			i++;
