@@ -1,9 +1,7 @@
 package ejercicios;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,7 +18,7 @@ public class Ejercicio2 {
 		}
 	
 	public static Map<Integer,List<String>> ejercicio2It (List<List<String>> listas){
-		//a partir de la lista crear un diccionario que agrupe el número de carácteres con una lista con las palabras de ese número de carácteres
+		//a partir de la lista crear un diccionario que agrupe el nÃºmero de carÃ¡cteres con una lista con las palabras de ese nÃºmero de carÃ¡cteres
 		Map<Integer,List<String>> dic = new TreeMap<>();
 		int i = 0;
 		while(i<listas.size()) {
@@ -43,30 +41,47 @@ public class Ejercicio2 {
 		return dic;
 		}
 	
-	public static Map<Integer, List<String>> ejercicio2RecFin(List<List<String>> listas, Map<Integer, List<String>> dic, Integer punteroExt, Integer punteroInt){
-		Integer longitudCadena = listas.get(punteroExt).get(punteroInt).length();
+	public static Map<Integer, List<String>> ejercicio2RecFin(List<List<String>> listas){
+		return ejercicio2RecFinAux(listas, new HashMap<Integer, List<String>>(), 0, 0);
+	}
+	
+	public static Map<Integer, List<String>> ejercicio2RecFinAux(List<List<String>> listas, Map<Integer, List<String>> dic, Integer punteroExt, Integer punteroInt){
+		Integer longitudPalabra = listas.get(punteroExt).get(punteroInt).length();
 		String palabra = listas.get(punteroExt).get(punteroInt);
-		if((punteroExt == listas.size()) && (punteroInt == listas.get(listas.size()-1).size())) {
-			if(!dic.containsKey(longitudCadena)) {
+		if(punteroExt == listas.size()-1 && punteroInt == listas.get(punteroExt).size()-1) {
+			if(!dic.containsKey(longitudPalabra)) {
 				List<String> aux = new ArrayList<>();
 				aux.add(palabra);
-				dic.put(longitudCadena, aux);
+				dic.put(longitudPalabra, aux);
 				return dic;
 			}
 			else {
-				dic.get(longitudCadena).add(palabra);
+				dic.get(longitudPalabra).add(palabra);
 				return dic;
 			}
 		}
 		else {
-			if(!dic.containsKey(longitudCadena)) {
+			if(!dic.containsKey(longitudPalabra)) {
 				List<String> aux = new ArrayList<>();
 				aux.add(palabra);
-				dic.put(longitudCadena, aux);
-				
+				dic.put(longitudPalabra, aux);
+				if(punteroInt == listas.get(punteroExt).size()-1) {
+					return ejercicio2RecFinAux(listas, dic, punteroExt + 1, 0);
+				}
+				else {
+					return ejercicio2RecFinAux(listas, dic, punteroExt, punteroInt + 1);
+				}
+			}
+			else {
+				dic.get(longitudPalabra).add(palabra);
+				if(punteroInt == listas.get(punteroExt).size()-1) {
+					return ejercicio2RecFinAux(listas, dic, punteroExt + 1, 0);
+				}
+				else {
+					return ejercicio2RecFinAux(listas, dic, punteroExt, punteroInt + 1);
+				}
 			}
 		}
-		return dic;
 	}
 	
 	public static List<List<String>> lector2(String ruta){
@@ -84,4 +99,3 @@ public class Ejercicio2 {
 	}
 		
 	}
-
