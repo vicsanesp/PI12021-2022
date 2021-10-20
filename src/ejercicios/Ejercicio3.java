@@ -1,102 +1,95 @@
 package ejercicios;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import us.lsi.common.Files2;
 
-public class Ejercicio2 {
+public class Ejercicio3 {
 
-	public static Map<Integer,List<String>> ejercicio2 (List<List<String>> listas) {
-		return listas.stream()
-		.flatMap(lista -> lista.stream())
-		.collect(Collectors.groupingBy(String::length));
+	//Creación de la clase Par mediante record, así como del constructor que necesitamos
+	public record Par(int v1, int v2) {
+		public static Par of(int v1, int v2) {
+			return new Par(v1, v2);
 		}
-	
-	public static Map<Integer,List<String>> ejercicio2It (List<List<String>> listas){
-		//a partir de la lista crear un diccionario que agrupe el número de carácteres con una lista con las palabras de ese número de carácteres
-		Map<Integer,List<String>> dic = new TreeMap<>();
+	}
+	//El método itera pares desde 0 hasta el límite, estos pares se van añadiendo a una lista
+	//el primer valor sigue una secuencia lineal, mientras que el segundo va variando en función
+	//de la condición t.v1 % 3 == 1
+	//tras lo cual se crea el string de la lista final.
+	public static String ejercicio3(Integer a, Integer limit) {
+		return Stream
+				.iterate(Par.of(0, a),
+						t -> t.v1 < limit,
+						t -> Par.of(t.v1+1, t.v1 % 3 == 1 ? t.v2 : t.v1+t.v2))
+				.collect(Collectors.toList())
+				.toString();
+	}
+
+	public static String ejercicio3It(Integer a, Integer limit) {
+		//Nuestro contador
 		int i = 0;
-		while(i<listas.size()) {
-			int j = 0;
-			while(j<listas.get(i).size()) {
-				String palabra = listas.get(i).get(j);
-				Integer longitudCadena = listas.get(i).get(j).length();
-				if(!dic.containsKey(longitudCadena)) {
-					List<String> aux = new ArrayList<>();
-					aux.add(palabra);
-					dic.put(longitudCadena, aux);
-				}
-				else {
-					dic.get(longitudCadena).add(palabra);
-				}
-				j++;
+		//Nuestra lista acumuladora
+		List<Par> res = new ArrayList<Par>();
+		//El par que vamos a ir modificando para añadir a nuestro acumulador
+		Par par = Par.of(0, a);
+		while(i<Math.abs(a)) {
+			if(Math.abs(par.v1 % 3) == 1) {
+				//A continuación actualizamos el par
+				par = Par.of(i, par.v2);
+				//Si se da la condición se añade a la lista el par que queremos
+				res.add(par);
+
+
+			}
+			else {
+				//A continuación también actualizamos el par
+				par = Par.of(i, par.v1+par.v2);
+				//Si no se da la condición modificamos el par de otra manera, como indica en el enunciado
+				res.add(par);
 			}
 			i++;
 		}
-		return dic;
-		}
-	
-	public static Map<Integer, List<String>> ejercicio2RecFin(List<List<String>> listas){
-		return ejercicio2RecFinAux(listas, new HashMap<Integer, List<String>>(), 0, 0);
+		return res.toString();
 	}
-	
-	public static Map<Integer, List<String>> ejercicio2RecFinAux(List<List<String>> listas, Map<Integer, List<String>> dic, Integer punteroExt, Integer punteroInt){
-		Integer longitudPalabra = listas.get(punteroExt).get(punteroInt).length();
-		String palabra = listas.get(punteroExt).get(punteroInt);
-		if(punteroExt == listas.size()-1 && punteroInt == listas.get(punteroExt).size()-1) {
-			if(!dic.containsKey(longitudPalabra)) {
-				List<String> aux = new ArrayList<>();
-				aux.add(palabra);
-				dic.put(longitudPalabra, aux);
-				return dic;
-			}
-			else {
-				dic.get(longitudPalabra).add(palabra);
-				return dic;
-			}
+
+	public static String ejercicio3RecFin(Integer a, Integer limit) {
+		return ejercicio3RecFinAux(a, limit, new ArrayList<Par>(), 0, Par.of(0, a));
+
+	}
+
+	public static String ejercicio3RecFinAux(Integer a, Integer limit, List<Par> res, Integer puntero, Par par) {
+		if(puntero == limit-1) {
+			res.add(Par.of(puntero, par.v2));
+			return res.toString();
 		}
 		else {
-			if(!dic.containsKey(longitudPalabra)) {
-				List<String> aux = new ArrayList<>();
-				aux.add(palabra);
-				dic.put(longitudPalabra, aux);
-				if(punteroInt == listas.get(punteroExt).size()-1) {
-					return ejercicio2RecFinAux(listas, dic, punteroExt + 1, 0);
-				}
-				else {
-					return ejercicio2RecFinAux(listas, dic, punteroExt, punteroInt + 1);
-				}
+			if(par.v1 % 3 == 1) {
+				res.add(Par.of(puntero, par.v2));
+				return ejercicio3RecFinAux(a, limit, res, puntero+1, Par.of(puntero, par.v2));
+
 			}
 			else {
-				dic.get(longitudPalabra).add(palabra);
-				if(punteroInt == listas.get(punteroExt).size()-1) {
-					return ejercicio2RecFinAux(listas, dic, punteroExt + 1, 0);
-				}
-				else {
-					return ejercicio2RecFinAux(listas, dic, punteroExt, punteroInt + 1);
-				}
+				res.add(Par.of(puntero, par.v1 + par.v2));
+				return ejercicio3RecFinAux(a, limit, res, puntero+1, Par.of(puntero, par.v1 + par.v2));
+
 			}
 		}
 	}
-	
-	public static List<List<String>> lector2(String ruta){
-		List<List<String>> res = new ArrayList<>();
+
+	public static List<Par> lector3(String ruta){
 		List<String> listaFichero = Files2.linesFromFile(ruta);
+		List<Par> res = new ArrayList<>();
 		for(String l:listaFichero) {
 			String[] a = l.split(",");
-			List<String> aux = new ArrayList<>();
-			for (int i = 0; i < a.length; i++) {
-				aux.add(a[i]);
-			}
+			Par aux = Par.of(Integer.parseInt(a[0]), Integer.parseInt(a[1]));
 			res.add(aux);
 		}
 		return res;
 	}
-		
-	}
+
+}
+
 
