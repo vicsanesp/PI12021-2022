@@ -9,8 +9,8 @@ import us.lsi.common.Files2;
 
 public class Ejercicio4 {
 
-	//Diseñe un algoritmo que dados dos números n y e (con n real positivo mayor que 1 y
-	//e real en el intervalo (0,1)), devuelva un número real que se corresponda con la raíz cúbica
+	//DiseÃ±e un algoritmo que dados dos nÃºmeros n y e (con n real positivo mayor que 1 y
+	//e real en el intervalo (0,1)), devuelva un nÃºmero real que se corresponda con la raÃ­z cÃºbica
 	//de n con un error menor que e
 	public static double ejercicio4It(double n, double e) {
         double numeroIzquierdo = 0;
@@ -34,24 +34,20 @@ public class Ejercicio4 {
 	}
 	
 	public static double ejercicio4RecFin(double n, double e) {
-		return ejercicio4RecFinAux(n, e, 0, 0, n);
+		return ejercicio4RecFinAux(n, e, .0, n, n/2);
 	}
 	
-	public static double ejercicio4RecFinAux(double n, double e, double cubo, double izq, double der) {
-		if(Math.abs(cubo-n) < e) {
-			return (izq+der)/2;
-		}
-		else {
-			double raiz = (izq+der)/2;
-			cubo = raiz*raiz*raiz;
-			
-			if(cubo > n) {
-				return ejercicio4RecFinAux(n, e, cubo, izq, raiz);
+	public static Double ejercicio4RecFinAux(double n, double e, double numeroIzquierdo, double numeroDerecho, double raiz) {
+		double cubo = (raiz * raiz * raiz); 
+		if(Math.abs(n-cubo)>e) {
+			if(cubo>n) {
+				return ejercicio4RecFinAux(n, e, numeroIzquierdo, raiz, (numeroIzquierdo+numeroDerecho)/2);
 			}
 			else {
-				return ejercicio4RecFinAux(n, e, cubo, raiz, der);
+				return ejercicio4RecFinAux(n, e, raiz, numeroDerecho, (numeroIzquierdo+numeroDerecho)/2);
 			}
 		}
+		return raiz;
 	}
 	
 	
