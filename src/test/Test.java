@@ -1,11 +1,6 @@
 package test;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -16,14 +11,13 @@ import ejercicios.Ejercicio3;
 import ejercicios.Ejercicio3.Par;
 import ejercicios.Ejercicio4;
 import us.lsi.common.DoublePair;
-import us.lsi.common.Files2;
 
 public class Test {
 
 	public static void main(String[] args) {
-		// El predicado sobre String devuelve cierto si dicho String contiene alguna vocal abierta (es decir, a, e ó o)
+		// El predicado sobre String devuelve cierto si dicho String contiene alguna vocal abierta (es decir, a, e Ã³ o)
 		// El predicado sobre Integer devuelve cierto si ese entero es par
-		// La función String -> Integer devuelve la longitud de la cadena
+		// La funciÃ³n String -> Integer devuelve la longitud de la cadena
 		System.out.println("##################################################\r\n"
 				+ "# Ejercicio 1                                    #\r\n"
 				+ "# ficheros/PI1E1_DatosEntrada.txt                #\r\n"
@@ -82,7 +76,7 @@ public class Test {
 			System.out.println("Entrada: " + ej4.get(j));
 			System.out.println("1. Iterativa (while):        " + Ejercicio4.ejercicio4It(ej4.get(j).first(), ej4.get(j).second()));
 			System.out.println("2. Recursiva final:        " + Ejercicio4.ejercicio4RecFin(ej4.get(j).first(), ej4.get(j).second()));
-			System.out.println("3. Funcional:        ");
+			System.out.println("3. Funcional:        " + Ejercicio4.ejercicio4Func(ej4.get(j).first(), ej4.get(j).second()));
 		}
 		
 		
